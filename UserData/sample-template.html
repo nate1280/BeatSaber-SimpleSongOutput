@@ -1,0 +1,163 @@
+<html>
+	<head>
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Expires" content="-1">
+		<meta http-equiv="Refresh" content="1">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700,800" rel="stylesheet"> 
+	</head>
+	<body>
+		<style>
+			body {
+				font-family: "Montserrat", sans-serif;
+
+				color: white;
+				/* background: black; */
+
+				margin: 0;
+
+				display: flex;
+				flex-direction: column;
+			}
+
+			#overlay {
+				display: flex;
+				flex-direction: column;
+				
+				position: absolute;
+				left: 40px;
+				bottom: 40px;
+			}
+
+			/* Beatmap */
+
+			#beatmap {
+				display: flex;
+			}
+
+			#cover {
+				overflow: hidden;
+				border-radius: 6px;
+				position: relative;
+			}
+
+			#image {
+				width: 90px;
+				height: 90px;
+			}
+
+			#meta {
+				display: flex;
+				flex-direction: column;
+
+				flex-grow: 1;
+				padding: 0 16px;
+			}
+
+			#text {
+				flex-grow: 1;
+
+				/* Fix text offset */
+				transform: translate(0, -5px);
+			}
+
+			#titles {
+				display: flex;
+				align-items: flex-end;
+			}
+
+			#title {
+				font-size: 24px;
+				font-weight: 700;
+			}
+
+			#subtitle {
+				font-size: 14px;
+				font-weight: 600;
+				margin: 0 4px 2px 4px;
+			}
+
+			#artist {
+				display: block;
+				font-size: 16px;
+				font-weight: 400;
+				margin: 2px 0 0 0;
+			}
+
+			#difficulty, #bpm {
+				display: inline-block;
+
+				font-size: 10px;
+				font-weight: 800;
+				text-transform: uppercase;
+				letter-spacing: 3px;
+			}
+
+			#difficulty {
+				padding: 4px 5px 4px 8px;
+
+				color: black;
+				background: white;
+				border-radius: 4px;
+			}
+
+			/* Progress */
+
+			#cover svg {
+				transform: rotate(-90deg);
+			}
+
+			#cover div {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				width: 90px;
+				height: 90px;
+			}
+
+			#cover svg, #cover div {
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+
+			#darken {
+				fill: black;
+				opacity: 0.5;
+			}
+		</style>
+		<script>
+			function reload_page() {
+				location.reload(true);
+				setTimeout(reload_page,2000);
+			}
+			setTimeout(reload_page,2000);
+		</script>
+		<div id="overlay">
+			<div id="beatmap">
+				<div id="cover">
+					<img id="image" src="%base64thumbnail%">
+					<svg width="90" height="90">
+						<rect width="90" height="90" id="darken"></rect>
+					</svg>
+				</div>
+
+				<div id="meta">
+					<div id="text">
+						<div id="titles">
+							<span id="title">%songname%</span>
+							<span id="subtitle">%songsubname%</span>
+						</div>
+
+						<span id="artist">%levelauthorname%</span>
+					</div>
+					
+					<div>
+						<span id="difficulty">%difficulty%</span>
+						<span id="bpm">%songbpm% BPM</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

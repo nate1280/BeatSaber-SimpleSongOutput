@@ -1,0 +1,4 @@
+﻿<settings-container>
+  <bool-setting text='Enabled' value='enabled' hover-hint='Enable or disable the Simple Song Output.'></bool-setting>
+  <bool-setting text='Output Thumbnail' value='output-thumbnail' hover-hint="Write out song's thumbnail to jpg"></bool-setting>
+</settings-container>
