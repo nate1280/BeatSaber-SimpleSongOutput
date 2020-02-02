@@ -9,38 +9,40 @@ you're familiar with Versus, it uses the same kind of system)
 
 Default output is:
 
-%songname%%songsubname: - % by %levelauthorname% on %difficulty%
+`%songname%%songsubname: - % by %levelauthorname% on %difficulty%`
 
 Available options:
 
-%time%				- The current time, formatted hh:mm
-%longdate%			- The current time, formatted hh:mm:ss
-%date%				- The current date, formatted yyyy/MM/dd
-%lf%				- A linefeed
-%songname%			- The song name
-%songsubname%		- Secondary song name, not all have this
-%songauthorname%	- The author of the song
-%levelauthorname%	- The mapper
-%difficulty%		- The difficulty being played
-%songbpm%			- Beats per minute of the song
-%notejumpspeed%		- NJS of the map
-%notescount%		- Number of notes in the map
-%bombscount%		- Number of bombs in the map
-%obstaclescount%	- Number of obstacles in the map
+String | Replacement Value
+-|-
+`%time%` | The current time, formatted hh:mm
+%longdate% | The current time, formatted hh:mm:ss
+%date%` | The current date, formatted yyyy/MM/dd
+%lf%` | A linefeed
+%songname%` | The song name
+%songsubname%` | Secondary song name, not all have this
+%songauthorname%` | The author of the song
+%levelauthorname%` | The mapper
+%difficulty%` | The difficulty being played
+%songbpm%` | Beats per minute of the song
+%notejumpspeed%` | NJS of the map
+%notescount%` | Number of notes in the map
+%bombscount%` | Number of bombs in the map
+%obstaclescount%` | Number of obstacles in the map
 
 All fields can also be optionally prefixed by adding text after a colon
-as an example, %songsubname: - %, this will prefix songsubname with
-a " - " if its not empty.
+as an example,` %songsubname: - %`, this will prefix songsubname with
+a `" - "` if its not empty.
 
 To change this, simply modify the settings file.
 
 You can also output a song's cover into a thumbnail, this is by default turned
 off and can be enabled in the settings.  Also, this thumbnail is auto resized
-(by default) to 256x256 pixels, and is adjustable via the settings file
+(by default) to `256x256` pixels, and is adjustable via the settings file
 manually (a restart of beat saber is required after changing it)
 
 You can also override the location, and filenames for the output, the defaults
-get placed in UserData\SimpleSongOutput\, you can specify a full path to put
+get placed in `UserData\SimpleSongOutput\`, you can specify a full path to put
 them elsewhere on your computer.
 
 Another feature is using a template file instead of the format string.  You can
@@ -51,6 +53,7 @@ auto-refresh (as can be seen in the example).
 
 Default config:
 
+```
 {
   "enabled": true,
   "saveThumbnail": false
@@ -61,3 +64,4 @@ Default config:
   "songFormat": "%songname%%songsubname: - % by %levelauthorname% on %difficulty%",
   "thumbnailSize": 256
 }
+```
