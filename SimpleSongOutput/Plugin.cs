@@ -40,10 +40,10 @@ namespace SimpleSongOutput
             cfg = Settings.Load();
 
             BSEvents.OnLoad();
-            BSEvents.menuSceneLoadedFresh += OnMenuSceneLoadedFresh;
+            BSEvents.lateMenuSceneLoadedFresh += lateMenuSceneLoadedFresh;
         }
 
-        private void OnMenuSceneLoadedFresh()
+        private void lateMenuSceneLoadedFresh(ScenesTransitionSetupDataSO obj)
         {
             // add BSML mod settings
             BSMLSettings.instance.AddSettingsMenu("Simple Song Output", "SimpleSongOutput.Views.SimpleSongOutputSettings.bsml", SimpleSongOutputSettings.instance);

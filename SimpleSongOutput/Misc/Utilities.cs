@@ -56,8 +56,11 @@ namespace SimpleSongOutput.Misc
         /// <param name="difficulty">Difficulty of song</param>
         public static async void WriteToOutputFile(IBeatmapLevel level, IDifficultyBeatmap difficultyBeatmap)
         {
-            // get song cover texture
-            var tex = await level.GetCoverImageTexture2DAsync(System.Threading.CancellationToken.None);
+            // get song cover sprite
+            var sprite = await level.GetCoverImageAsync(System.Threading.CancellationToken.None);
+
+            // get the texture from the sprite
+            var tex = sprite.texture;
 
             // resize to thumbnail size
             tex = tex.ResizeTexture(Plugin.cfg.ThumbnailSize, Plugin.cfg.ThumbnailSize);
@@ -76,7 +79,7 @@ namespace SimpleSongOutput.Misc
                 Base64Thumbnail = base64Image,
                 SongBPM = level.beatsPerMinute,
                 NoteJumpSpeed = difficultyBeatmap.noteJumpMovementSpeed,
-				NotesCount = difficultyBeatmap.beatmapData.notesCount,
+				NotesCount = difficultyBeatmap.beatmapData.numberOfLines,
 				BombsCount = difficultyBeatmap.beatmapData.bombsCount,
 				ObstaclesCount = difficultyBeatmap.beatmapData.obstaclesCount
             };
@@ -120,7 +123,10 @@ namespace SimpleSongOutput.Misc
         public static async void WriteThumbnail(IBeatmapLevel level)
         {
             // get song cover texture
-            var tex = await level.GetCoverImageTexture2DAsync(System.Threading.CancellationToken.None);
+            var sprite = await level.GetCoverImageAsync(System.Threading.CancellationToken.None);
+
+            // get the texture from the sprite
+            var tex = sprite.texture;
 
             // resize to thumbnail size
             tex = tex.ResizeTexture(Plugin.cfg.ThumbnailSize, Plugin.cfg.ThumbnailSize);
