@@ -2,14 +2,15 @@
   "$schema": "https://raw.githubusercontent.com/nike4613/ModSaber-MetadataFileSchema/master/Schema.json",
   "author": "nate1280",
   "description": "Simple song output to flat file",
-  "gameVersion": "1.16.1",
+  "gameVersion": "1.21.0",
   "id": "SimpleSongOutput",
   "name": "SimpleSongOutput",
-  "version": "1.5.0",
+  "version": "1.21.0",
   "dependsOn": {
-    "BSIPA": "^4.1.6",
-    "BS Utils": "^1.10.0",
-    "BeatSaberMarkupLanguage": "^1.5.3"
+    "BSIPA": "^4.2.2",
+    "BS Utils": "^1.12.0",
+    "BeatSaberMarkupLanguage": "^1.6.3",
+    "BeatSaverSharp": "^3.4.2" 
   },
   "loadAfter": [
     "BS Utils"
