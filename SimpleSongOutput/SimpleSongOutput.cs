@@ -56,6 +56,14 @@ namespace SimpleSongOutput
             // write empty string to file to clear it
             Utilities.ClearOutputFile();
 
+            yield return null;
+
+            // do udp broadcast
+            if (!string.IsNullOrEmpty(Plugin.cfg.UdpStopAction))
+            {
+                Utilities.UdpBroadcastStop();
+            }
+
             // return
             yield return null;
         }
@@ -83,6 +91,14 @@ namespace SimpleSongOutput
 
             // write out song information
             Utilities.WriteToOutputFile(difficultyBeatmap.level, difficultyBeatmap);
+
+            yield return null;
+
+            // do udp broadcast
+            if (!string.IsNullOrEmpty(Plugin.cfg.UdpStartAction))
+            {
+                Utilities.UdpBroadcastStart(difficultyBeatmap.level, difficultyBeatmap);
+            }
 
             yield return null;
 

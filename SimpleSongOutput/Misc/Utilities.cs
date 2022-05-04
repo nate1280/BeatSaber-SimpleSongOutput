@@ -2,9 +2,14 @@
 using SimpleSongOutput.Models;
 using System;
 using System.IO;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using BeatSaverSharp;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 namespace SimpleSongOutput.Misc
@@ -160,6 +165,84 @@ namespace SimpleSongOutput.Misc
 
             // output image to file
             File.WriteAllBytes(Plugin.FullThumbnailFilename, img);
+        }
+
+        private static readonly JsonSerializer _serializer = new JsonSerializer { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+
+        public static async void UdpBroadcastStart(IBeatmapLevel level, IDifficultyBeatmap difficultyBeatmap)
+        {
+            var ipEndPoint = new IPEndPoint(IPAddress.Broadcast, Plugin.cfg.UdpPort);
+
+            using (var udpClient = new UdpClient { EnableBroadcast = true })
+            {
+                var udpJson = new JObject();
+                udpJson["request"] = "DoAction";
+
+                var action = new JObject();
+                action["name"] = Plugin.cfg.UdpStartAction;
+
+                udpJson["action"] = action;
+
+                var isCustomLevel = true;
+                var mapHash = string.Empty;
+                try
+                {
+                    mapHash = level.levelID.Split('_')[2];
+                }
+                catch
+                {
+                    isCustomLevel = false;
+                }
+                isCustomLevel = isCustomLevel && mapHash.Length == 40;
+
+                var beatmapDataBasicInfo = await difficultyBeatmap.GetBeatmapDataBasicInfoAsync();
+
+                // build song info model
+                var songInfo = new SongInfoModel
+                {
+                    Hash = isCustomLevel ? mapHash : string.Empty,
+                    SongName = level.songName,
+                    SongSubName = level.songSubName,
+                    SongAuthorName = level.songAuthorName,
+                    LevelAuthorName = level.levelAuthorName,
+                    Difficulty = difficultyBeatmap.difficulty,
+                    SongBPM = level.beatsPerMinute,
+                    NoteJumpSpeed = difficultyBeatmap.noteJumpMovementSpeed,
+                    NotesCount = beatmapDataBasicInfo.numberOfLines,
+                    BombsCount = beatmapDataBasicInfo.bombsCount,
+                    ObstaclesCount = beatmapDataBasicInfo.obstaclesCount
+                };
+
+                var beatmap = await beatSaver.BeatmapByHash(mapHash);
+
+                songInfo.Key = beatmap != null ? beatmap.ID : string.Empty;
+
+                udpJson["args"] = JObject.FromObject(songInfo, _serializer);
+
+                var udpPayload = Encoding.UTF8.GetBytes(udpJson.ToString(Formatting.None));
+
+                await udpClient.SendAsync(udpPayload, udpPayload.Length, ipEndPoint);
+            }
+        }
+
+        public static async void UdpBroadcastStop()
+        {
+            var ipEndPoint = new IPEndPoint(IPAddress.Broadcast, Plugin.cfg.UdpPort);
+
+            using (var udpClient = new UdpClient { EnableBroadcast = true })
+            {
+                var udpJson = new JObject();
+                udpJson["request"] = "DoAction";
+
+                var action = new JObject();
+                action["name"] = Plugin.cfg.UdpStopAction;
+
+                udpJson["action"] = action;
+
+                var udpPayload = Encoding.UTF8.GetBytes(udpJson.ToString(Formatting.None));
+
+                await udpClient.SendAsync(udpPayload, udpPayload.Length, ipEndPoint);
+            }
         }
     }
 }

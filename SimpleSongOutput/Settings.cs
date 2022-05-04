@@ -17,6 +17,10 @@ namespace SimpleSongOutput
         public string SongFormat { get; set; } = "%songname%%songsubname: - % by %levelauthorname% on %difficulty%";
         public int ThumbnailSize { get; set; } = 256;
 
+        public string UdpStartAction { get; set; } = "BeatSaberSongStart";
+        public string UdpStopAction { get; set; } = "BeatSaberSongStop";
+        public int UdpPort { get; set; } = 4242;
+
         [JsonIgnore]
         private static readonly string Filename = Path.Combine(Plugin.DataPath, "SimpleSongOutput.json");
 
