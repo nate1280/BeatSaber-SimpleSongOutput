@@ -2,12 +2,17 @@
 using SimpleSongOutput.Models;
 using System;
 using System.IO;
+using System.Reflection;
+using System.Text;
+using BeatSaverSharp;
 using UnityEngine;
 
 namespace SimpleSongOutput.Misc
 {
     public class Utilities
     {
+        private static BeatSaver beatSaver = new BeatSaver("SimpleSongOutput", Assembly.GetExecutingAssembly().GetName().Version);
+
         /// <summary>
         /// Convert Difficulty enum to string
         /// </summary>
@@ -67,10 +72,25 @@ namespace SimpleSongOutput.Misc
 
             // encode to base64
             var base64Image = $"data:image/jpg;base64,{Convert.ToBase64String(tex.EncodeToJPG())}";
-            
+
+            var isCustomLevel = true;
+            var mapHash = string.Empty;
+            try
+            {
+                mapHash = level.levelID.Split('_')[2];
+            }
+            catch
+            {
+                isCustomLevel = false;
+            }
+            isCustomLevel = isCustomLevel && mapHash.Length == 40;
+
+            var beatmapDataBasicInfo = await difficultyBeatmap.GetBeatmapDataBasicInfoAsync();
+
             // build song info model
             var songInfo = new SongInfoModel
             {
+                Hash = isCustomLevel ? mapHash : string.Empty,
                 SongName = level.songName,
                 SongSubName = level.songSubName,
                 SongAuthorName = level.songAuthorName,
@@ -79,10 +99,14 @@ namespace SimpleSongOutput.Misc
                 Base64Thumbnail = base64Image,
                 SongBPM = level.beatsPerMinute,
                 NoteJumpSpeed = difficultyBeatmap.noteJumpMovementSpeed,
-				NotesCount = difficultyBeatmap.beatmapData.numberOfLines,
-				BombsCount = difficultyBeatmap.beatmapData.bombsCount,
-				ObstaclesCount = difficultyBeatmap.beatmapData.obstaclesCount
+				NotesCount = beatmapDataBasicInfo.numberOfLines,
+				BombsCount = beatmapDataBasicInfo.bombsCount,
+				ObstaclesCount = beatmapDataBasicInfo.obstaclesCount
             };
+
+            var beatmap = await beatSaver.BeatmapByHash(mapHash);
+
+            songInfo.Key = beatmap != null ? beatmap.ID : string.Empty;
 
             // check if we are using a template file
             if (string.IsNullOrEmpty(Plugin.cfg.SongTemplate))
